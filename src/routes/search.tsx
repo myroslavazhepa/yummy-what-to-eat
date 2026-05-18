@@ -4,16 +4,13 @@ import { ArrowLeft, Search as SearchIcon, X, Clock } from "lucide-react";
 import { BottomNav } from "@/components/bottom-nav";
 import { FavoriteButton } from "@/components/favorite-button";
 import { DISHES, SECTIONS, dishesBySection, type SectionId } from "@/lib/dishes";
-import { z } from "zod";
-import { zodValidator, fallback } from "@tanstack/zod-adapter";
-
-const searchSchema = z.object({
-  section: fallback(z.string().optional(), undefined),
-});
+type SearchParams = { section?: string };
 
 export const Route = createFileRoute("/search")({
   component: SearchPage,
-  validateSearch: zodValidator(searchSchema),
+  validateSearch: (input: Record<string, unknown>): SearchParams => ({
+    section: typeof input.section === "string" ? input.section : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Пошук страв — категорії та рецепти" },
