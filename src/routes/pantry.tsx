@@ -131,11 +131,17 @@ function PantryPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return [];
-    return ALL_INGREDIENTS.filter((i) => i.name.toLowerCase().includes(q)).slice(0, 8);
-  }, [query]);
+    const base = q
+      ? ALL_INGREDIENTS.filter((i) => i.name.toLowerCase().includes(q))
+      : ALL_INGREDIENTS.filter((i) => !selected.has(i.id));
+    return base
+      .sort((a, b) => (popularityMap.get(b.id) ?? 0) - (popularityMap.get(a.id) ?? 0))
+      .slice(0, 8);
+  }, [query, selected]);
 
-  const suggestedChips = ALL_INGREDIENTS.filter((i) => SUGGESTED_IDS.includes(i.id));
+  const suggestedChips = ALL_INGREDIENTS.filter((i) => POPULAR_IDS.includes(i.id)).sort(
+    (a, b) => POPULAR_IDS.indexOf(a.id) - POPULAR_IDS.indexOf(b.id)
+  );
   const selectedList = ALL_INGREDIENTS.filter((i) => selected.has(i.id));
 
   const ranked = useMemo(() => {
