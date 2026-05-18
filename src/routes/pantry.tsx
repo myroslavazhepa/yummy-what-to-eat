@@ -45,6 +45,8 @@ const ALL_INGREDIENTS: Ingredient[] = [
   { id: "oil", name: "Олія", emoji: "🫒", category: "Базове" },
 ];
 
+const SUGGESTED_IDS = ["egg", "bread", "tomato", "onion", "garlic", "pasta", "cheese", "oil"];
+
 const popularityMap = new Map<string, number>();
 for (const r of RECIPES) {
   for (const n of r.needs) {
