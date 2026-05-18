@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Home, Search, Heart, User, Sparkles, LayoutGrid, Carrot, ChevronRight } from "lucide-react";
 import featuredPasta from "@/assets/featured-pasta.jpg";
 import mealPumpkin from "@/assets/meal-pumpkin.jpg";
@@ -92,10 +92,13 @@ function Index() {
               <LayoutGrid className="size-5" strokeWidth={1.75} />
               <span className="text-[11px] font-medium">Каталог</span>
             </button>
-            <button className="flex flex-col items-center gap-2 rounded-2xl bg-background p-4 text-muted-foreground ring-1 ring-foreground/5 transition hover:bg-secondary active:scale-95">
+            <Link
+              to="/pantry"
+              className="flex flex-col items-center gap-2 rounded-2xl bg-background p-4 text-muted-foreground ring-1 ring-foreground/5 transition hover:bg-secondary active:scale-95"
+            >
               <Carrot className="size-5" strokeWidth={1.75} />
               <span className="text-[11px] font-medium">З того що є</span>
-            </button>
+            </Link>
           </section>
 
           {/* Categories */}
