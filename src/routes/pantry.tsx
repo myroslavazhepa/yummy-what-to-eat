@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowLeft, Search, X, Sparkles, Check, ChevronRight, Clock } from "lucide-react";
+import { ArrowLeft, Search, X, Sparkles, Check, ChevronRight, Clock, TrendingUp } from "lucide-react";
 import mealPumpkin from "@/assets/meal-pumpkin.jpg";
 import mealSalmon from "@/assets/meal-salmon.jpg";
 import mealToast from "@/assets/meal-toast.jpg";
@@ -107,6 +107,17 @@ const RECIPES: Recipe[] = [
 
 const SUGGESTED_IDS = ["egg", "bread", "tomato", "onion", "garlic", "pasta", "cheese", "oil"];
 
+const popularityMap = new Map<string, number>();
+for (const r of RECIPES) {
+  for (const n of r.needs) {
+    popularityMap.set(n, (popularityMap.get(n) ?? 0) + 1);
+  }
+}
+
+const POPULAR_IDS = Array.from(popularityMap.entries())
+  .sort((a, b) => b[1] - a[1])
+  .map(([id]) => id);
+
 function PantryPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
@@ -120,11 +131,17 @@ function PantryPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return [];
-    return ALL_INGREDIENTS.filter((i) => i.name.toLowerCase().includes(q)).slice(0, 8);
-  }, [query]);
+    const base = q
+      ? ALL_INGREDIENTS.filter((i) => i.name.toLowerCase().includes(q))
+      : ALL_INGREDIENTS.filter((i) => !selected.has(i.id));
+    return base
+      .sort((a, b) => (popularityMap.get(b.id) ?? 0) - (popularityMap.get(a.id) ?? 0))
+      .slice(0, 8);
+  }, [query, selected]);
 
-  const suggestedChips = ALL_INGREDIENTS.filter((i) => SUGGESTED_IDS.includes(i.id));
+  const suggestedChips = ALL_INGREDIENTS.filter((i) => POPULAR_IDS.includes(i.id)).sort(
+    (a, b) => POPULAR_IDS.indexOf(a.id) - POPULAR_IDS.indexOf(b.id)
+  );
   const selectedList = ALL_INGREDIENTS.filter((i) => selected.has(i.id));
 
   const ranked = useMemo(() => {
@@ -178,28 +195,33 @@ function PantryPage() {
 
           {/* Search results */}
           {filtered.length > 0 && (
-            <div className="mt-3 overflow-hidden rounded-2xl bg-background ring-1 ring-foreground/10">
-              {filtered.map((i) => {
-                const isOn = selected.has(i.id);
-                return (
-                  <button
-                    key={i.id}
-                    onClick={() => toggle(i.id)}
-                    className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition hover:bg-secondary"
-                  >
-                    <span className="text-lg">{i.emoji}</span>
-                    <span className="flex-1 text-sm font-medium">{i.name}</span>
-                    <span className="text-xs text-muted-foreground">{i.category}</span>
-                    {isOn ? (
-                      <span className="grid size-5 place-items-center rounded-full bg-primary text-primary-foreground">
-                        <Check className="size-3" strokeWidth={3} />
-                      </span>
-                    ) : (
-                      <span className="size-5 rounded-full ring-1 ring-foreground/15" />
-                    )}
-                  </button>
-                );
-              })}
+            <div className="mt-3">
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                {query.trim() ? "Результати пошуку" : "Популярні продукти"}
+              </p>
+              <div className="overflow-hidden rounded-2xl bg-background ring-1 ring-foreground/10">
+                {filtered.map((i) => {
+                  const isOn = selected.has(i.id);
+                  return (
+                    <button
+                      key={i.id}
+                      onClick={() => toggle(i.id)}
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition hover:bg-secondary"
+                    >
+                      <span className="text-lg">{i.emoji}</span>
+                      <span className="flex-1 text-sm font-medium">{i.name}</span>
+                      <span className="text-xs text-muted-foreground">{i.category}</span>
+                      {isOn ? (
+                        <span className="grid size-5 place-items-center rounded-full bg-primary text-primary-foreground">
+                          <Check className="size-3" strokeWidth={3} />
+                        </span>
+                      ) : (
+                        <span className="size-5 rounded-full ring-1 ring-foreground/15" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
         </header>
@@ -236,7 +258,7 @@ function PantryPage() {
           {/* Suggested ingredients */}
           <section className="px-6 pb-6">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-              Запропоновані
+              Популярні
             </p>
             <div className="flex flex-wrap gap-2">
               {suggestedChips.map((i) => {
