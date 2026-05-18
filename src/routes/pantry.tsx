@@ -258,7 +258,7 @@ function PantryPage() {
           {/* Suggested ingredients */}
           <section className="px-6 pb-6">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-              Запропоновані
+              Популярні
             </p>
             <div className="flex flex-wrap gap-2">
               {suggestedChips.map((i) => {
