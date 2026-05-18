@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Home, Search, Heart, User, Sparkles, LayoutGrid, Carrot, ChevronRight } from "lucide-react";
+import { User, Sparkles, LayoutGrid, Carrot, ChevronRight } from "lucide-react";
+import { BottomNav } from "@/components/bottom-nav";
+import { FavoriteButton } from "@/components/favorite-button";
 import featuredPasta from "@/assets/featured-pasta.jpg";
 import mealPumpkin from "@/assets/meal-pumpkin.jpg";
 import mealSalmon from "@/assets/meal-salmon.jpg";
@@ -28,9 +30,9 @@ const categories = [
 ];
 
 const ideas = [
-  { title: "Гарбузовий крем-суп", meta: "35 хв · Середньо", img: mealPumpkin },
-  { title: "Лосось з овочами", meta: "25 хв · Легко", img: mealSalmon },
-  { title: "Авокадо тост з яйцем", meta: "10 хв · Легко", img: mealToast },
+  { id: "pumpkin-soup", title: "Гарбузовий крем-суп", meta: "35 хв · Середньо", img: mealPumpkin },
+  { id: "salmon-veg", title: "Лосось з овочами", meta: "25 хв · Легко", img: mealSalmon },
+  { id: "avocado-toast", title: "Авокадо тост з яйцем", meta: "10 хв · Легко", img: mealToast },
 ];
 
 function Index() {
