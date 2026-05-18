@@ -107,6 +107,17 @@ const RECIPES: Recipe[] = [
 
 const SUGGESTED_IDS = ["egg", "bread", "tomato", "onion", "garlic", "pasta", "cheese", "oil"];
 
+const popularityMap = new Map<string, number>();
+for (const r of RECIPES) {
+  for (const n of r.needs) {
+    popularityMap.set(n, (popularityMap.get(n) ?? 0) + 1);
+  }
+}
+
+const POPULAR_IDS = Array.from(popularityMap.entries())
+  .sort((a, b) => b[1] - a[1])
+  .map(([id]) => id);
+
 function PantryPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
