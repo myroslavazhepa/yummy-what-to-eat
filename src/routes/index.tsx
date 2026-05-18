@@ -129,11 +129,11 @@ function Index() {
             </div>
             <div className="space-y-3">
               {ideas.map((m) => (
-                <button
-                  key={m.title}
-                  className="flex w-full items-center gap-4 rounded-2xl bg-background p-3 text-left ring-1 ring-foreground/5 transition active:scale-[0.99]"
+                <div
+                  key={m.id}
+                  className="flex w-full items-center gap-4 rounded-2xl bg-background p-3 text-left ring-1 ring-foreground/5"
                 >
-                  <div className="size-20 shrink-0 overflow-hidden rounded-xl">
+                  <div className="relative size-20 shrink-0 overflow-hidden rounded-xl">
                     <img
                       src={m.img}
                       alt={m.title}
@@ -142,50 +142,21 @@ function Index() {
                       height={400}
                       className="h-full w-full object-cover"
                     />
+                    <FavoriteButton id={m.id} className="absolute right-1 top-1 size-7" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-medium">{m.title}</h4>
                     <p className="mt-0.5 text-sm text-muted-foreground">{m.meta}</p>
                   </div>
                   <ChevronRight className="size-5 text-muted-foreground" strokeWidth={1.75} />
-                </button>
+                </div>
               ))}
             </div>
           </section>
         </main>
 
-        {/* Bottom nav */}
-        <nav className="sticky bottom-0 border-t border-foreground/5 bg-background/85 px-8 pb-8 pt-3 backdrop-blur-xl">
-          <div className="flex items-center justify-between">
-            <NavItem icon={Home} label="Головна" active />
-            <NavItem icon={Search} label="Пошук" />
-            <NavItem icon={Heart} label="Улюблене" />
-            <NavItem icon={User} label="Профіль" />
-          </div>
-        </nav>
+        <BottomNav active="home" />
       </div>
     </div>
-  );
-}
-
-function NavItem({
-  icon: Icon,
-  label,
-  active = false,
-}: {
-  icon: typeof Home;
-  label: string;
-  active?: boolean;
-}) {
-  return (
-    <button
-      className={
-        "flex flex-col items-center gap-1 " +
-        (active ? "text-primary" : "text-muted-foreground/60 hover:text-muted-foreground")
-      }
-    >
-      <Icon className="size-5" strokeWidth={1.75} />
-      <span className="text-[10px] font-medium">{label}</span>
-    </button>
   );
 }
