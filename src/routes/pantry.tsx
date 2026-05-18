@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowLeft, Search, X, Sparkles, Check, ChevronRight, Clock } from "lucide-react";
+import { ArrowLeft, Search, X, Sparkles, Check, ChevronRight, Clock, TrendingUp } from "lucide-react";
 import mealPumpkin from "@/assets/meal-pumpkin.jpg";
 import mealSalmon from "@/assets/meal-salmon.jpg";
 import mealToast from "@/assets/meal-toast.jpg";
