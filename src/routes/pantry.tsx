@@ -195,28 +195,33 @@ function PantryPage() {
 
           {/* Search results */}
           {filtered.length > 0 && (
-            <div className="mt-3 overflow-hidden rounded-2xl bg-background ring-1 ring-foreground/10">
-              {filtered.map((i) => {
-                const isOn = selected.has(i.id);
-                return (
-                  <button
-                    key={i.id}
-                    onClick={() => toggle(i.id)}
-                    className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition hover:bg-secondary"
-                  >
-                    <span className="text-lg">{i.emoji}</span>
-                    <span className="flex-1 text-sm font-medium">{i.name}</span>
-                    <span className="text-xs text-muted-foreground">{i.category}</span>
-                    {isOn ? (
-                      <span className="grid size-5 place-items-center rounded-full bg-primary text-primary-foreground">
-                        <Check className="size-3" strokeWidth={3} />
-                      </span>
-                    ) : (
-                      <span className="size-5 rounded-full ring-1 ring-foreground/15" />
-                    )}
-                  </button>
-                );
-              })}
+            <div className="mt-3">
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                {query.trim() ? "Результати пошуку" : "Популярні продукти"}
+              </p>
+              <div className="overflow-hidden rounded-2xl bg-background ring-1 ring-foreground/10">
+                {filtered.map((i) => {
+                  const isOn = selected.has(i.id);
+                  return (
+                    <button
+                      key={i.id}
+                      onClick={() => toggle(i.id)}
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition hover:bg-secondary"
+                    >
+                      <span className="text-lg">{i.emoji}</span>
+                      <span className="flex-1 text-sm font-medium">{i.name}</span>
+                      <span className="text-xs text-muted-foreground">{i.category}</span>
+                      {isOn ? (
+                        <span className="grid size-5 place-items-center rounded-full bg-primary text-primary-foreground">
+                          <Check className="size-3" strokeWidth={3} />
+                        </span>
+                      ) : (
+                        <span className="size-5 rounded-full ring-1 ring-foreground/15" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
         </header>
