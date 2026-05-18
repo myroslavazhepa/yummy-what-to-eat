@@ -23,13 +23,46 @@ export const Route = createFileRoute("/pantry")({
 type Ingredient = { id: string; name: string; emoji: string; category: string };
 
 const ALL_INGREDIENTS: Ingredient[] = [
+  // Базове
   { id: "egg", name: "Яйця", emoji: "🥚", category: "Базове" },
   { id: "bread", name: "Хліб", emoji: "🍞", category: "Базове" },
   { id: "butter", name: "Масло", emoji: "🧈", category: "Базове" },
   { id: "milk", name: "Молоко", emoji: "🥛", category: "Базове" },
   { id: "cheese", name: "Сир", emoji: "🧀", category: "Базове" },
+  { id: "oil", name: "Олія", emoji: "🫒", category: "Базове" },
+  { id: "salt", name: "Сіль", emoji: "🧂", category: "Базове" },
+  { id: "sugar", name: "Цукор", emoji: "🍬", category: "Базове" },
+  { id: "flour", name: "Борошно", emoji: "🌾", category: "Базове" },
+  { id: "honey", name: "Мед", emoji: "🍯", category: "Базове" },
+  { id: "vinegar", name: "Оцет", emoji: "🍶", category: "Базове" },
+  { id: "soy", name: "Соєвий соус", emoji: "🥢", category: "Базове" },
+  { id: "mayo", name: "Майонез", emoji: "🥣", category: "Базове" },
+  { id: "ketchup", name: "Кетчуп", emoji: "🍅", category: "Базове" },
+  { id: "mustard", name: "Гірчиця", emoji: "🟡", category: "Базове" },
+  { id: "yeast", name: "Дріжджі", emoji: "🫧", category: "Базове" },
+  // Молочне
+  { id: "yogurt", name: "Йогурт", emoji: "🥛", category: "Молочне" },
+  { id: "sourcream", name: "Сметана", emoji: "🥄", category: "Молочне" },
+  { id: "cream", name: "Вершки", emoji: "🥛", category: "Молочне" },
+  { id: "cottage", name: "Сир кисломолочний", emoji: "🧀", category: "Молочне" },
+  { id: "feta", name: "Фета", emoji: "🧀", category: "Молочне" },
+  { id: "mozzarella", name: "Моцарела", emoji: "🧀", category: "Молочне" },
+  { id: "parmesan", name: "Пармезан", emoji: "🧀", category: "Молочне" },
+  // Крупи / макарони
   { id: "pasta", name: "Паста", emoji: "🍝", category: "Крупи" },
   { id: "rice", name: "Рис", emoji: "🍚", category: "Крупи" },
+  { id: "buckwheat", name: "Гречка", emoji: "🌰", category: "Крупи" },
+  { id: "oats", name: "Вівсянка", emoji: "🥣", category: "Крупи" },
+  { id: "quinoa", name: "Кіноа", emoji: "🌾", category: "Крупи" },
+  { id: "couscous", name: "Кускус", emoji: "🌾", category: "Крупи" },
+  { id: "bulgur", name: "Булгур", emoji: "🌾", category: "Крупи" },
+  { id: "noodles", name: "Локшина", emoji: "🍜", category: "Крупи" },
+  // Бобові
+  { id: "lentils", name: "Сочевиця", emoji: "🫘", category: "Бобові" },
+  { id: "beans", name: "Квасоля", emoji: "🫘", category: "Бобові" },
+  { id: "chickpeas", name: "Нут", emoji: "🫛", category: "Бобові" },
+  { id: "peas", name: "Горошок", emoji: "🟢", category: "Бобові" },
+  // Овочі
   { id: "potato", name: "Картопля", emoji: "🥔", category: "Овочі" },
   { id: "tomato", name: "Помідори", emoji: "🍅", category: "Овочі" },
   { id: "onion", name: "Цибуля", emoji: "🧅", category: "Овочі" },
@@ -38,11 +71,83 @@ const ALL_INGREDIENTS: Ingredient[] = [
   { id: "pumpkin", name: "Гарбуз", emoji: "🎃", category: "Овочі" },
   { id: "avocado", name: "Авокадо", emoji: "🥑", category: "Овочі" },
   { id: "broccoli", name: "Броколі", emoji: "🥦", category: "Овочі" },
+  { id: "cauliflower", name: "Цвітна капуста", emoji: "🥦", category: "Овочі" },
+  { id: "cabbage", name: "Капуста", emoji: "🥬", category: "Овочі" },
+  { id: "cucumber", name: "Огірки", emoji: "🥒", category: "Овочі" },
+  { id: "bellpepper", name: "Перець солодкий", emoji: "🫑", category: "Овочі" },
+  { id: "chili", name: "Перець чилі", emoji: "🌶️", category: "Овочі" },
+  { id: "eggplant", name: "Баклажан", emoji: "🍆", category: "Овочі" },
+  { id: "zucchini", name: "Кабачок", emoji: "🥒", category: "Овочі" },
+  { id: "corn", name: "Кукурудза", emoji: "🌽", category: "Овочі" },
+  { id: "mushroom", name: "Печериці", emoji: "🍄", category: "Овочі" },
+  { id: "beet", name: "Буряк", emoji: "🫜", category: "Овочі" },
+  { id: "radish", name: "Редиска", emoji: "🥕", category: "Овочі" },
+  { id: "spinach", name: "Шпинат", emoji: "🥬", category: "Овочі" },
+  { id: "lettuce", name: "Салат", emoji: "🥬", category: "Овочі" },
+  { id: "celery", name: "Селера", emoji: "🌿", category: "Овочі" },
+  { id: "ginger", name: "Імбир", emoji: "🫚", category: "Овочі" },
+  { id: "olives", name: "Оливки", emoji: "🫒", category: "Овочі" },
+  // М’ясо
   { id: "chicken", name: "Курка", emoji: "🍗", category: "М’ясо" },
+  { id: "beef", name: "Яловичина", emoji: "🥩", category: "М’ясо" },
+  { id: "pork", name: "Свинина", emoji: "🥓", category: "М’ясо" },
+  { id: "lamb", name: "Баранина", emoji: "🍖", category: "М’ясо" },
+  { id: "turkey", name: "Індичка", emoji: "🦃", category: "М’ясо" },
+  { id: "bacon", name: "Бекон", emoji: "🥓", category: "М’ясо" },
+  { id: "sausage", name: "Ковбаса", emoji: "🌭", category: "М’ясо" },
+  { id: "ham", name: "Шинка", emoji: "🍖", category: "М’ясо" },
+  { id: "mince", name: "Фарш", emoji: "🥩", category: "М’ясо" },
+  // Риба / морепродукти
   { id: "salmon", name: "Лосось", emoji: "🐟", category: "Риба" },
+  { id: "tuna", name: "Тунець", emoji: "🐟", category: "Риба" },
+  { id: "cod", name: "Тріска", emoji: "🐟", category: "Риба" },
+  { id: "shrimp", name: "Креветки", emoji: "🦐", category: "Риба" },
+  { id: "squid", name: "Кальмари", emoji: "🦑", category: "Риба" },
+  { id: "mussels", name: "Мідії", emoji: "🦪", category: "Риба" },
+  { id: "anchovy", name: "Анчоуси", emoji: "🐟", category: "Риба" },
+  // Фрукти / ягоди
   { id: "lemon", name: "Лимон", emoji: "🍋", category: "Фрукти" },
+  { id: "lime", name: "Лайм", emoji: "🍈", category: "Фрукти" },
+  { id: "orange", name: "Апельсин", emoji: "🍊", category: "Фрукти" },
+  { id: "apple", name: "Яблуко", emoji: "🍎", category: "Фрукти" },
+  { id: "pear", name: "Груша", emoji: "🍐", category: "Фрукти" },
+  { id: "banana", name: "Банан", emoji: "🍌", category: "Фрукти" },
+  { id: "grape", name: "Виноград", emoji: "🍇", category: "Фрукти" },
+  { id: "strawberry", name: "Полуниця", emoji: "🍓", category: "Фрукти" },
+  { id: "blueberry", name: "Чорниця", emoji: "🫐", category: "Фрукти" },
+  { id: "raspberry", name: "Малина", emoji: "🍒", category: "Фрукти" },
+  { id: "peach", name: "Персик", emoji: "🍑", category: "Фрукти" },
+  { id: "pineapple", name: "Ананас", emoji: "🍍", category: "Фрукти" },
+  { id: "mango", name: "Манго", emoji: "🥭", category: "Фрукти" },
+  { id: "watermelon", name: "Кавун", emoji: "🍉", category: "Фрукти" },
+  // Зелень / спеції
   { id: "basil", name: "Базилік", emoji: "🌿", category: "Зелень" },
-  { id: "oil", name: "Олія", emoji: "🫒", category: "Базове" },
+  { id: "parsley", name: "Петрушка", emoji: "🌿", category: "Зелень" },
+  { id: "dill", name: "Кріп", emoji: "🌿", category: "Зелень" },
+  { id: "cilantro", name: "Кінза", emoji: "🌿", category: "Зелень" },
+  { id: "mint", name: "М’ята", emoji: "🌱", category: "Зелень" },
+  { id: "rosemary", name: "Розмарин", emoji: "🌿", category: "Зелень" },
+  { id: "thyme", name: "Чебрець", emoji: "🌿", category: "Зелень" },
+  { id: "oregano", name: "Орегано", emoji: "🌿", category: "Зелень" },
+  { id: "pepper", name: "Чорний перець", emoji: "⚫", category: "Спеції" },
+  { id: "paprika", name: "Паприка", emoji: "🌶️", category: "Спеції" },
+  { id: "cumin", name: "Кмин", emoji: "🟤", category: "Спеції" },
+  { id: "curry", name: "Каррі", emoji: "🟡", category: "Спеції" },
+  { id: "cinnamon", name: "Кориця", emoji: "🟫", category: "Спеції" },
+  { id: "vanilla", name: "Ваніль", emoji: "🌼", category: "Спеції" },
+  // Горіхи
+  { id: "walnut", name: "Волоські горіхи", emoji: "🌰", category: "Горіхи" },
+  { id: "almond", name: "Мигдаль", emoji: "🌰", category: "Горіхи" },
+  { id: "cashew", name: "Кеш’ю", emoji: "🌰", category: "Горіхи" },
+  { id: "peanut", name: "Арахіс", emoji: "🥜", category: "Горіхи" },
+  { id: "pistachio", name: "Фісташки", emoji: "🥜", category: "Горіхи" },
+  // Інше
+  { id: "chocolate", name: "Шоколад", emoji: "🍫", category: "Інше" },
+  { id: "cocoa", name: "Какао", emoji: "🟤", category: "Інше" },
+  { id: "coffee", name: "Кава", emoji: "☕", category: "Інше" },
+  { id: "tea", name: "Чай", emoji: "🍵", category: "Інше" },
+  { id: "tofu", name: "Тофу", emoji: "⬜", category: "Інше" },
+  { id: "tahini", name: "Тахіні", emoji: "🥣", category: "Інше" },
 ];
 
 type Recipe = {
@@ -131,10 +236,12 @@ function PantryPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const base = q
-      ? ALL_INGREDIENTS.filter((i) => i.name.toLowerCase().includes(q))
-      : ALL_INGREDIENTS.filter((i) => !selected.has(i.id));
-    return base
+    if (q) {
+      return ALL_INGREDIENTS.filter((i) => i.name.toLowerCase().includes(q)).sort(
+        (a, b) => (popularityMap.get(b.id) ?? 0) - (popularityMap.get(a.id) ?? 0)
+      );
+    }
+    return ALL_INGREDIENTS.filter((i) => !selected.has(i.id))
       .sort((a, b) => (popularityMap.get(b.id) ?? 0) - (popularityMap.get(a.id) ?? 0))
       .slice(0, 8);
   }, [query, selected]);
