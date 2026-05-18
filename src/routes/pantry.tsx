@@ -236,10 +236,12 @@ function PantryPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const base = q
-      ? ALL_INGREDIENTS.filter((i) => i.name.toLowerCase().includes(q))
-      : ALL_INGREDIENTS.filter((i) => !selected.has(i.id));
-    return base
+    if (q) {
+      return ALL_INGREDIENTS.filter((i) => i.name.toLowerCase().includes(q)).sort(
+        (a, b) => (popularityMap.get(b.id) ?? 0) - (popularityMap.get(a.id) ?? 0)
+      );
+    }
+    return ALL_INGREDIENTS.filter((i) => !selected.has(i.id))
       .sort((a, b) => (popularityMap.get(b.id) ?? 0) - (popularityMap.get(a.id) ?? 0))
       .slice(0, 8);
   }, [query, selected]);
