@@ -1,40 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArrowLeft, Camera, Plus, X, User as UserIcon } from "lucide-react";
 import { BottomNav } from "@/components/bottom-nav";
-
-type Profile = {
-  name: string;
-  bio: string;
-  avatar: string | null;
-  forbidden: string[];
-  allergies: string[];
-  favorites: string[];
-  shopping: string[];
-};
-
-const KEY = "profile:v1";
-
-const empty: Profile = {
-  name: "",
-  bio: "",
-  avatar: null,
-  forbidden: [],
-  allergies: [],
-  favorites: [],
-  shopping: [],
-};
-
-function readProfile(): Profile {
-  if (typeof window === "undefined") return empty;
-  try {
-    const raw = window.localStorage.getItem(KEY);
-    if (!raw) return empty;
-    return { ...empty, ...JSON.parse(raw) };
-  } catch {
-    return empty;
-  }
-}
+import { useProfile } from "@/lib/profile";
 
 export const Route = createFileRoute("/profile")({
   component: ProfilePage,
@@ -50,25 +18,15 @@ export const Route = createFileRoute("/profile")({
 });
 
 function ProfilePage() {
-  const [profile, setProfile] = useState<Profile>(empty);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    setProfile(readProfile());
-    setLoaded(true);
-  }, []);
-
-  useEffect(() => {
-    if (!loaded) return;
-    window.localStorage.setItem(KEY, JSON.stringify(profile));
-  }, [profile, loaded]);
+  const { profile, update } = useProfile();
+  const nameMissing = profile.name.trim().length === 0;
 
   const onAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      setProfile((p) => ({ ...p, avatar: typeof reader.result === "string" ? reader.result : null }));
+      update((p) => ({ ...p, avatar: typeof reader.result === "string" ? reader.result : null }));
     };
     reader.readAsDataURL(file);
   };
@@ -110,37 +68,50 @@ function ProfilePage() {
               </span>
               <input type="file" accept="image/*" className="hidden" onChange={onAvatar} />
             </label>
-            <input
-              value={profile.name}
-              onChange={(e) => setProfile((p) => ({ ...p, name: e.target.value }))}
-              placeholder="Ім’я (за бажанням)"
-              className="w-full max-w-[260px] rounded-xl bg-secondary px-4 py-2.5 text-center text-base font-semibold tracking-tight ring-1 ring-foreground/5 focus:outline-none focus:ring-primary/40"
-            />
+
+            <div className="w-full max-w-[280px]">
+              <label className="mb-1 flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                <span>Ім’я <span className="text-destructive">*</span></span>
+                {nameMissing && <span className="text-destructive">обов’язкове</span>}
+              </label>
+              <input
+                value={profile.name}
+                onChange={(e) => update((p) => ({ ...p, name: e.target.value }))}
+                placeholder="Як до вас звертатися?"
+                required
+                className={
+                  "w-full rounded-xl bg-secondary px-4 py-2.5 text-center text-base font-semibold tracking-tight ring-1 focus:outline-none " +
+                  (nameMissing
+                    ? "ring-destructive/40 focus:ring-destructive/60"
+                    : "ring-foreground/5 focus:ring-primary/40")
+                }
+              />
+            </div>
             <textarea
               value={profile.bio}
-              onChange={(e) => setProfile((p) => ({ ...p, bio: e.target.value }))}
+              onChange={(e) => update((p) => ({ ...p, bio: e.target.value }))}
               placeholder="Коротко про вас, ваші смаки..."
               rows={2}
-              className="w-full resize-none rounded-xl bg-secondary px-4 py-2.5 text-center text-sm text-muted-foreground ring-1 ring-foreground/5 focus:outline-none focus:ring-primary/40"
+              className="w-full max-w-[280px] resize-none rounded-xl bg-secondary px-4 py-2.5 text-center text-sm text-muted-foreground ring-1 ring-foreground/5 focus:outline-none focus:ring-primary/40"
             />
           </section>
 
           <ChipSection
             title="Заборонені продукти"
-            hint="Те, що не пропонувати"
+            hint="Сховаємо страви з цими продуктами або запропонуємо заміну"
             tone="destructive"
             items={profile.forbidden}
             placeholder="напр. свинина"
-            onChange={(items) => setProfile((p) => ({ ...p, forbidden: items }))}
+            onChange={(items) => update((p) => ({ ...p, forbidden: items }))}
           />
 
           <ChipSection
             title="Алергії"
-            hint="Виключимо з рецептів"
+            hint="Покажемо альтернативи у рецепті"
             tone="warning"
             items={profile.allergies}
             placeholder="напр. горіхи"
-            onChange={(items) => setProfile((p) => ({ ...p, allergies: items }))}
+            onChange={(items) => update((p) => ({ ...p, allergies: items }))}
           />
 
           <ChipSection
@@ -149,7 +120,7 @@ function ProfilePage() {
             tone="primary"
             items={profile.favorites}
             placeholder="напр. паста карбонара"
-            onChange={(items) => setProfile((p) => ({ ...p, favorites: items }))}
+            onChange={(items) => update((p) => ({ ...p, favorites: items }))}
           />
 
           <ChipSection
@@ -158,7 +129,7 @@ function ProfilePage() {
             tone="neutral"
             items={profile.shopping}
             placeholder="напр. молоко"
-            onChange={(items) => setProfile((p) => ({ ...p, shopping: items }))}
+            onChange={(items) => update((p) => ({ ...p, shopping: items }))}
           />
         </main>
 

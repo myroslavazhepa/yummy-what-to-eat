@@ -127,9 +127,11 @@ function SearchPage() {
               ) : (
                 <div className="space-y-3">
                   {list.map((d) => (
-                    <article
+                    <Link
                       key={d.id}
-                      className="overflow-hidden rounded-2xl bg-background ring-1 ring-foreground/5"
+                      to="/dish/$id"
+                      params={{ id: d.id }}
+                      className="block overflow-hidden rounded-2xl bg-background ring-1 ring-foreground/5 transition active:scale-[0.99]"
                     >
                       <div className="relative aspect-[16/10]">
                         <img
@@ -150,7 +152,7 @@ function SearchPage() {
                           {d.ingredients.join(" · ")}
                         </p>
                       </div>
-                    </article>
+                    </Link>
                   ))}
                 </div>
               )}
