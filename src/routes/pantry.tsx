@@ -427,8 +427,10 @@ function PantryPage() {
             ) : (
               <div className="space-y-3">
                 {ranked.map((r) => (
-                  <button
+                  <Link
                     key={r.id}
+                    to="/dish/$id"
+                    params={{ id: r.id }}
                     className="flex w-full items-center gap-4 rounded-2xl bg-background p-3 text-left ring-1 ring-foreground/5 transition active:scale-[0.99]"
                   >
                     <div className="relative size-20 shrink-0 overflow-hidden rounded-xl">
@@ -448,6 +450,12 @@ function PantryPage() {
                         <Clock className="size-3" strokeWidth={2} />
                         {r.time} · {r.difficulty}
                       </p>
+                      {r.violations.length > 0 && (
+                        <p className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-destructive">
+                          <ShieldAlert className="size-3" strokeWidth={2} />
+                          Потрібна заміна: {r.violations.map((v) => v.ingredient).join(", ")}
+                        </p>
+                      )}
                       <p className="mt-1 truncate text-xs text-muted-foreground">
                         {r.missing.length === 0
                           ? "Все є ✨"
@@ -461,7 +469,7 @@ function PantryPage() {
                       className="size-5 text-muted-foreground"
                       strokeWidth={1.75}
                     />
-                  </button>
+                  </Link>
                 ))}
               </div>
             )}
