@@ -9,12 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SurpriseRouteImport } from './routes/surprise'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PantryRouteImport } from './routes/pantry'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DishIdRouteImport } from './routes/dish.$id'
 
+const SurpriseRoute = SurpriseRouteImport.update({
+  id: '/surprise',
+  path: '/surprise',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -40,6 +47,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DishIdRoute = DishIdRouteImport.update({
+  id: '/dish/$id',
+  path: '/dish/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +59,8 @@ export interface FileRoutesByFullPath {
   '/pantry': typeof PantryRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
+  '/surprise': typeof SurpriseRoute
+  '/dish/$id': typeof DishIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +68,8 @@ export interface FileRoutesByTo {
   '/pantry': typeof PantryRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
+  '/surprise': typeof SurpriseRoute
+  '/dish/$id': typeof DishIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +78,37 @@ export interface FileRoutesById {
   '/pantry': typeof PantryRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
+  '/surprise': typeof SurpriseRoute
+  '/dish/$id': typeof DishIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/favorites' | '/pantry' | '/profile' | '/search'
+  fullPaths:
+    | '/'
+    | '/favorites'
+    | '/pantry'
+    | '/profile'
+    | '/search'
+    | '/surprise'
+    | '/dish/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/favorites' | '/pantry' | '/profile' | '/search'
-  id: '__root__' | '/' | '/favorites' | '/pantry' | '/profile' | '/search'
+  to:
+    | '/'
+    | '/favorites'
+    | '/pantry'
+    | '/profile'
+    | '/search'
+    | '/surprise'
+    | '/dish/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/favorites'
+    | '/pantry'
+    | '/profile'
+    | '/search'
+    | '/surprise'
+    | '/dish/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,10 +117,19 @@ export interface RootRouteChildren {
   PantryRoute: typeof PantryRoute
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
+  SurpriseRoute: typeof SurpriseRoute
+  DishIdRoute: typeof DishIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/surprise': {
+      id: '/surprise'
+      path: '/surprise'
+      fullPath: '/surprise'
+      preLoaderRoute: typeof SurpriseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -116,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dish/$id': {
+      id: '/dish/$id'
+      path: '/dish/$id'
+      fullPath: '/dish/$id'
+      preLoaderRoute: typeof DishIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +181,8 @@ const rootRouteChildren: RootRouteChildren = {
   PantryRoute: PantryRoute,
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
+  SurpriseRoute: SurpriseRoute,
+  DishIdRoute: DishIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

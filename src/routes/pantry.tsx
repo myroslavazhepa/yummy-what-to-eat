@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowLeft, Search, X, Sparkles, Check, ChevronRight, Clock, TrendingUp } from "lucide-react";
+import { ArrowLeft, Search, X, Sparkles, Check, ChevronRight, Clock, TrendingUp, ShieldAlert } from "lucide-react";
 import mealPumpkin from "@/assets/meal-pumpkin.jpg";
 import mealSalmon from "@/assets/meal-salmon.jpg";
 import mealToast from "@/assets/meal-toast.jpg";
 import featuredPasta from "@/assets/featured-pasta.jpg";
+import { dishById } from "@/lib/dishes";
+import { useProfile, getDishViolations } from "@/lib/profile";
 
 export const Route = createFileRoute("/pantry")({
   component: PantryPage,
@@ -161,7 +163,7 @@ type Recipe = {
 
 const RECIPES: Recipe[] = [
   {
-    id: "pasta",
+    id: "pasta-tomato",
     title: "Паста з томатами та базиліком",
     time: "20 хв",
     difficulty: "Легко",
@@ -169,7 +171,7 @@ const RECIPES: Recipe[] = [
     needs: ["pasta", "tomato", "garlic", "oil", "basil", "cheese"],
   },
   {
-    id: "toast",
+    id: "avocado-toast",
     title: "Авокадо-тост з яйцем",
     time: "10 хв",
     difficulty: "Легко",
@@ -177,7 +179,7 @@ const RECIPES: Recipe[] = [
     needs: ["bread", "avocado", "egg", "lemon", "oil"],
   },
   {
-    id: "soup",
+    id: "pumpkin-soup",
     title: "Гарбузовий крем-суп",
     time: "35 хв",
     difficulty: "Середньо",
@@ -185,7 +187,7 @@ const RECIPES: Recipe[] = [
     needs: ["pumpkin", "onion", "carrot", "garlic", "butter", "milk"],
   },
   {
-    id: "salmon",
+    id: "salmon-veg",
     title: "Лосось з овочами на пательні",
     time: "25 хв",
     difficulty: "Легко",
@@ -201,7 +203,7 @@ const RECIPES: Recipe[] = [
     needs: ["egg", "milk", "cheese", "butter"],
   },
   {
-    id: "rice",
+    id: "chicken-rice",
     title: "Курка з рисом і морквою",
     time: "30 хв",
     difficulty: "Середньо",
@@ -224,6 +226,7 @@ const POPULAR_IDS = Array.from(popularityMap.entries())
   .map(([id]) => id);
 
 function PantryPage() {
+  const { profile } = useProfile();
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
 
@@ -256,12 +259,20 @@ function PantryPage() {
     return RECIPES.map((r) => {
       const have = r.needs.filter((n) => selected.has(n));
       const missing = r.needs.filter((n) => !selected.has(n));
-      return { ...r, match: have.length / r.needs.length, have, missing };
+      const dish = dishById(r.id);
+      const violations = dish ? getDishViolations(dish.ingredients, profile) : [];
+      return { ...r, match: have.length / r.needs.length, have, missing, violations };
     })
       .filter((r) => r.have.length >= Math.max(2, Math.ceil(r.needs.length / 2)))
-      .sort((a, b) => b.match - a.match)
+      .sort((a, b) => {
+        // Push dishes with violations to the bottom
+        if (a.violations.length !== b.violations.length) {
+          return a.violations.length - b.violations.length;
+        }
+        return b.match - a.match;
+      })
       .slice(0, 6);
-  }, [selected]);
+  }, [selected, profile]);
 
   return (
     <div className="min-h-screen bg-secondary/40 text-foreground">
@@ -416,8 +427,10 @@ function PantryPage() {
             ) : (
               <div className="space-y-3">
                 {ranked.map((r) => (
-                  <button
+                  <Link
                     key={r.id}
+                    to="/dish/$id"
+                    params={{ id: r.id }}
                     className="flex w-full items-center gap-4 rounded-2xl bg-background p-3 text-left ring-1 ring-foreground/5 transition active:scale-[0.99]"
                   >
                     <div className="relative size-20 shrink-0 overflow-hidden rounded-xl">
@@ -437,6 +450,12 @@ function PantryPage() {
                         <Clock className="size-3" strokeWidth={2} />
                         {r.time} · {r.difficulty}
                       </p>
+                      {r.violations.length > 0 && (
+                        <p className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-destructive">
+                          <ShieldAlert className="size-3" strokeWidth={2} />
+                          Потрібна заміна: {r.violations.map((v) => v.ingredient).join(", ")}
+                        </p>
+                      )}
                       <p className="mt-1 truncate text-xs text-muted-foreground">
                         {r.missing.length === 0
                           ? "Все є ✨"
@@ -450,7 +469,7 @@ function PantryPage() {
                       className="size-5 text-muted-foreground"
                       strokeWidth={1.75}
                     />
-                  </button>
+                  </Link>
                 ))}
               </div>
             )}
