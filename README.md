@@ -51,7 +51,7 @@ The application was tested by several early users and improved based on their fe
 
 ## Live Demo
 
-Add my live link here:
+Live demo:
 https://yummy-what-to-eat-main.vercel.app
 
 ## Author
